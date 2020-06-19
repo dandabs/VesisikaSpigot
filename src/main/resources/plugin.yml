@@ -1,0 +1,7 @@
+name: Vesisika
+version: 1.0
+main: app.vesisika.Plugin
+api-version: 1.15
+author: dandabs
+website: https://vesisika.app
+prefix: Vesisika

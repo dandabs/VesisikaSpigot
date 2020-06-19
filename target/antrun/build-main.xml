@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <property name="runtime_classpath" refid="maven.runtime.classpath"/>
+  <taskdef classname="com.yworks.yguard.YGuardTask" classpath="/Users/dan/Documents/IdeaProjects/Vesisika/yguard-2.10.0.jar" name="yguard"/>
+  <yguard>
+    <inoutpairs resources="auto">
+      <fileset dir="/Users/dan/Documents/IdeaProjects/Vesisika/target/classes">
+        <exclude name="*_obf.jar"/>
+      </fileset>
+    </inoutpairs>
+  </yguard>
+</target>
+</project>
