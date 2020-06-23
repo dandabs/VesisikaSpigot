@@ -1,7 +1,12 @@
-name: Vesisika
+name: VesisikaConnect
 version: 1.0
 main: app.vesisika.Plugin
-api-version: 1.15
-author: dandabs
+api-version: 1.14
+author: info@vesisika.app
 website: https://vesisika.app
-prefix: Vesisika
+prefix: VesisikaConnect
+commands:
+  vesisika:
+    description: Vesisika configuration command.
+    usage: /vesisika
+    aliases: [vesisikaconnect, vesisika, vesi, vs]
