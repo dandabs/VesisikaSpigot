@@ -5,6 +5,7 @@ api-version: 1.14
 author: info@vesisika.app
 website: https://vesisika.app
 prefix: VesisikaConnect
+softdepend: [Vault]
 commands:
   vesisika:
     description: Vesisika configuration command.

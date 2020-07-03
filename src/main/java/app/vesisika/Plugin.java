@@ -4,9 +4,13 @@ import app.vesisika.commands.Vesisika;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -14,10 +18,16 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 public class Plugin extends JavaPlugin {
 
     private static SentryClient sentry;
+
+    private static final Logger log = Logger.getLogger("Minecraft");
+    private static Economy econ = null;
+    private static Permission perms = null;
+    private static Chat chat = null;
 
     @Override
     public void onEnable() {
@@ -27,6 +37,15 @@ public class Plugin extends JavaPlugin {
         Metrics metrics = new Metrics(this, 7924);
 
         this.getCommand("vesisika").setExecutor(new Vesisika()); // register Vesisika command
+
+        if (!setupEconomy() ) {
+
+        } else {
+
+            setupPermissions();
+            setupChat();
+
+        }
 
         File configFile = new File("vesisika.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -56,6 +75,42 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("Vesisika has disabled.");
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    private boolean setupChat() {
+        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        perms = rsp.getProvider();
+        return perms != null;
+    }
+
+    public static Economy getEconomy() {
+        return econ;
+    }
+
+    public static Permission getPermissions() {
+        return perms;
+    }
+
+    public static Chat getChat() {
+        return chat;
     }
 
 }
