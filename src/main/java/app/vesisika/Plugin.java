@@ -1,6 +1,7 @@
 package app.vesisika;
 
 import app.vesisika.commands.Vesisika;
+import app.vesisika.loops.Update;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
@@ -8,6 +9,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -29,9 +31,13 @@ public class Plugin extends JavaPlugin {
     private static Permission perms = null;
     private static Chat chat = null;
 
+    private static Plugin instance;
+
     @Override
     public void onEnable() {
         getLogger().info("Vesisika has enabled.");
+
+        instance = this;
 
         Sentry.init("https://c16fc30563004acd98ee1cd406c354ff@o394539.ingest.sentry.io/5283510");
         Metrics metrics = new Metrics(this, 7924);
@@ -50,8 +56,6 @@ public class Plugin extends JavaPlugin {
         File configFile = new File("vesisika.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        if (config.isSet("backend.key")) {
-
             String url = "https://us-central1-vesisika.cloudfunctions.net/app/update/" + config.getString("backend.key");
             try {
                 HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
@@ -69,9 +73,18 @@ public class Plugin extends JavaPlugin {
                 e.printStackTrace();
             }
 
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            public void run() {
+
+                boolean request = new Update().sendUpdates();
+
+                if (request == true) getLogger().info("Your server has synced with the Vesisika backend.");
+
+            }
+        }, 0L, 20L * 300);
+
         }
 
-    }
     @Override
     public void onDisable() {
         getLogger().info("Vesisika has disabled.");
@@ -111,6 +124,10 @@ public class Plugin extends JavaPlugin {
 
     public static Chat getChat() {
         return chat;
+    }
+
+    public static Plugin getInstance() {
+        return instance;
     }
 
 }
