@@ -1,6 +1,7 @@
 package app.vesisika;
 
 import app.vesisika.commands.Vesisika;
+import app.vesisika.listeners.PlayerLeaveEventListener;
 import app.vesisika.loops.Update;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
@@ -20,6 +21,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Plugin extends JavaPlugin {
@@ -43,6 +45,8 @@ public class Plugin extends JavaPlugin {
         Metrics metrics = new Metrics(this, 7924);
 
         this.getCommand("vesisika").setExecutor(new Vesisika()); // register Vesisika command
+
+        getServer().getPluginManager().registerEvents(new PlayerLeaveEventListener(), this);
 
         if (!setupEconomy() ) {
 
@@ -76,12 +80,12 @@ public class Plugin extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             public void run() {
 
-                boolean request = new Update().sendUpdates();
+                new Update().sendUpdates();
 
-                if (request == true) getLogger().info("Your server has synced with the Vesisika backend.");
+                getServer().getLogger().log(Level.INFO, "Your server has synced with the Vesisika backend.");
 
             }
-        }, 0L, 20L * 300);
+        }, 0L, 20L * 3600);
 
         }
 

@@ -42,25 +42,42 @@ public class Update {
 
             }
 
-            String url = "https://us-central1-vesisika.cloudfunctions.net/app/update/" + config.getString("backend.key");
-            try {
-                HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
-                httpClient.setRequestMethod("POST");
-                httpClient.setConnectTimeout(60000);
+            if (Plugin.getInstance().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
 
-                httpClient.setDoOutput(true);
-                try (DataOutputStream wr = new DataOutputStream(httpClient.getOutputStream())) {
-                    wr.writeBytes(urlParameters);
-                    wr.flush();
+                OfflinePlayer[] players = Bukkit.getOfflinePlayers();
+
+                for (OfflinePlayer p : players) {
+
+
+
                 }
 
-                int responseCode = httpClient.getResponseCode();
-                if (responseCode == 200) return true;
-                if (responseCode != 200) return false;
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            String url = "https://us-central1-vesisika.cloudfunctions.net/app/update/" + config.getString("backend.key");
+
+            String finalUrlParameters = urlParameters;
+            Thread newThread = new Thread(() -> {
+                try {
+                    HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
+                    httpClient.setRequestMethod("POST");
+                    httpClient.setConnectTimeout(60000);
+
+                    httpClient.setDoOutput(true);
+                    try (DataOutputStream wr = new DataOutputStream(httpClient.getOutputStream())) {
+                        wr.writeBytes(finalUrlParameters);
+                        wr.flush();
+                    }
+
+                    int responseCode = httpClient.getResponseCode();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            newThread.start();
+            return true;
 
         }
 
