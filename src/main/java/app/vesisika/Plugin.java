@@ -60,7 +60,7 @@ public class Plugin extends JavaPlugin {
         File configFile = new File("vesisika.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-            String url = "https://us-central1-vesisika.cloudfunctions.net/app/update/" + config.getString("backend.key");
+            String url = "https://api.vesisika.app/update/" + config.getString("backend.key");
             try {
                 HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
                 httpClient.setRequestMethod("POST");

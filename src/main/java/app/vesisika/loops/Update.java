@@ -54,7 +54,7 @@ public class Update {
 
             }
 
-            String url = "https://us-central1-vesisika.cloudfunctions.net/app/update/" + config.getString("backend.key");
+            String url = "https://api.vesisika.app/update/" + config.getString("backend.key");
 
             String finalUrlParameters = urlParameters;
             Thread newThread = new Thread(() -> {

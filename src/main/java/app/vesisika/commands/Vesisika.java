@@ -59,7 +59,7 @@ public class Vesisika implements CommandExecutor {
 
                 }
 
-                String url = "https://us-central1-vesisika.cloudfunctions.net/app/init";
+                String url = "https://api.vesisika.app/init";
 
                 try {
 
