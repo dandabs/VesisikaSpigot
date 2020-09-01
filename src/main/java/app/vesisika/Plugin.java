@@ -85,7 +85,7 @@ public class Plugin extends JavaPlugin {
                 getServer().getLogger().log(Level.INFO, "Your server has synced with the Vesisika backend.");
 
             }
-        }, 0L, 20L * 3600);
+        }, 20L * 300, 20L * 3600);
 
         }
 
