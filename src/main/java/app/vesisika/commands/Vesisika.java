@@ -67,8 +67,20 @@ public class Vesisika implements CommandExecutor {
                     httpClient.setRequestMethod("POST");
                     httpClient.setConnectTimeout(60000); // 60000ms = 60s = 1m
 
+                    String urlParameters = "";
+
+                    if (Bukkit.getOfflinePlayer(args[1]).isOnline()) {
+
+                        urlParameters = "token=" + key + "&uuid=" + Bukkit.getPlayer(args[1]).getUniqueId() + "&ip=" + Bukkit.getServer().getIp() + "&port=" + Bukkit.getServer().getPort() + "&name=" + Bukkit.getServer().getName();
+
+                    } else {
+
+                        urlParameters = "token=" + key + "&uuid=" + Bukkit.getOfflinePlayer(args[1]).getUniqueId() + "&ip=" + Bukkit.getServer().getIp() + "&port=" + Bukkit.getServer().getPort() + "&name=" + Bukkit.getServer().getName();
+
+                    }
+
                     // headers
-                    String urlParameters = "token=" + key + "&uuid=" + Bukkit.getOfflinePlayer(args[1]).getUniqueId().toString() + "&ip=" + Bukkit.getServer().getIp() + "&port=" + Bukkit.getServer().getPort() + "&name=" + Bukkit.getServer().getName();
+                    //urlParameters = "token=" + key + "&uuid=" + Bukkit.getOfflinePlayer(args[1]).getUniqueId().toString() + "&ip=" + Bukkit.getServer().getIp() + "&port=" + Bukkit.getServer().getPort() + "&name=" + Bukkit.getServer().getName();
 
                     // send request
                     httpClient.setDoOutput(true);

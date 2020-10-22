@@ -1,6 +1,8 @@
 package app.vesisika.loops;
 
 import app.vesisika.Plugin;
+import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMIUser;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -24,23 +26,7 @@ public class Update {
 
         if (config.isSet("backend.key")) {
 
-            if (Plugin.getInstance().getServer().getPluginManager().isPluginEnabled("Vault")) {
 
-                Economy econ = Plugin.getEconomy();
-
-                OfflinePlayer[] players = Bukkit.getOfflinePlayers();
-                JSONObject obj = new JSONObject();
-
-                for (OfflinePlayer p : players) {
-
-                    double bal = econ.getBalance(p);
-                    obj.put(p.getUniqueId(), String.valueOf(bal));
-
-                }
-
-                urlParameters += "&economy=" + obj.toString();
-
-            }
 
             if (Plugin.getInstance().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
 

@@ -1,7 +1,12 @@
 package app.vesisika.listeners;
 
 import app.vesisika.Plugin;
+import com.Zrips.CMI.CMI;
+import com.Zrips.CMI.Containers.CMIUser;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,7 +60,7 @@ public class PlayerLeaveEventListener implements Listener {
                 statz.put("crafted_items", crafted_items);
 
                 JSONObject damage_taken = new JSONObject();
-                damage_taken.put(p.getUniqueId().toString(), Integer.valueOf(PlaceholderAPI.setPlaceholders(p, "%statz_damage_taken%")));
+                damage_taken.put(p.getUniqueId().toString(), Long.valueOf(PlaceholderAPI.setPlaceholders(p, "%statz_damage_taken%")));
                 statz.put("damage_taken", damage_taken);
 
                 JSONObject distance_traveled_walk = new JSONObject();
@@ -97,6 +102,37 @@ public class PlayerLeaveEventListener implements Listener {
                 statz.put("xp_gained", xp_gained);
 
                 urlParameters += "&statz=" + statz.toString();
+
+            }
+
+            if (Plugin.getInstance().getServer().getPluginManager().isPluginEnabled("Vault")) {
+
+                Economy econ = Plugin.getEconomy();
+
+                JSONObject obj = new JSONObject();
+
+                double bal = econ.getBalance(p);
+                obj.put(p.getUniqueId(), String.valueOf(bal));
+
+                urlParameters += "&economy=" + obj.toString();
+
+            }
+
+            if (Plugin.getInstance().getServer().getPluginManager().isPluginEnabled("CMI")) {
+
+                JSONObject obj = new JSONObject();
+
+                CMIUser user = CMI.getInstance().getPlayerManager().getUser(p.getUniqueId());
+                obj.put(p.getUniqueId(), String.valueOf(user.getBalance()));
+
+                JSONObject cmistats = new JSONObject();
+
+                JSONObject time_played = new JSONObject();
+                long time = user.getTotalPlayTimeClean(); // assuming this is in minutes
+                time_played.put(p.getUniqueId().toString(), time);
+                cmistats.put("time_played", time_played);
+
+                urlParameters += "&cmieconomy=" + obj.toString() + "&cmistats=" + cmistats.toString();
 
             }
 

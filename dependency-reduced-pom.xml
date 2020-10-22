@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>app.vesisika</groupId>
   <artifactId>Vesisika</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.2.0-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
@@ -93,6 +93,13 @@
       <artifactId>placeholderapi</artifactId>
       <version>2.10.4</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.Zrips</groupId>
+      <artifactId>CMI</artifactId>
+      <version>7.6.2.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/CMIAPI7.6.2.0.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

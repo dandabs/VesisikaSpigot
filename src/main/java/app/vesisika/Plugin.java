@@ -77,7 +77,7 @@ public class Plugin extends JavaPlugin {
                 e.printStackTrace();
             }
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+        /*Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             public void run() {
 
                 new Update().sendUpdates();
@@ -85,7 +85,7 @@ public class Plugin extends JavaPlugin {
                 getServer().getLogger().log(Level.INFO, "Your server has synced with the Vesisika backend.");
 
             }
-        }, 0L, 20L * 3600);
+        }, 0L, 20L * 3600);*/
 
         }
 
