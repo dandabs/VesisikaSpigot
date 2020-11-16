@@ -112,7 +112,6 @@ public class Vesisika implements CommandExecutor {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Sentry.capture(e);
                 }
 
             } else sender.sendMessage("You already have a Vesisika herd attached to this server.");

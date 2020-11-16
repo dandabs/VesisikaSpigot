@@ -1,8 +1,8 @@
 name: VesisikaConnect
-version: 1.2.0
+version: ${project.version}
 main: app.vesisika.Plugin
 api-version: 1.14
-author: info@vesisika.app
+author: dandabs
 website: https://vesisika.app
 prefix: VesisikaConnect
 softdepend: [Vault, PlaceholderAPI, Statz, CMI]

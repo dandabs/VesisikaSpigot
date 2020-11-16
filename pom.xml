@@ -6,7 +6,7 @@
 
     <groupId>app.vesisika</groupId>
     <artifactId>Vesisika</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -29,6 +29,10 @@
         <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
 
@@ -74,11 +78,23 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.16-R0.4-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.16-R0.4-SNAPSHOT</version>
+            <type>javadoc</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.Zrips</groupId>
             <artifactId>CMI</artifactId>
             <version>7.6.2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/CMIAPI7.6.2.0.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -96,6 +112,11 @@
                             <!-- Replace this with your package! -->
                             <shadedPattern>app.vesisika</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.Zrips</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>app.vesisika</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -108,6 +129,12 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory> <!-- (your resources folder location) -->
+                <filtering>true</filtering> <!-- this is the important part, it's what replaces, filters, all placeholders in the resources folder (such as ${project.version} in plugin.yml) -->
+            </resource>
+        </resources>
     </build>
 
 </project>

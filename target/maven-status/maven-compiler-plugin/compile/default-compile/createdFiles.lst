@@ -1,4 +1,5 @@
 app/vesisika/Plugin.class
-app/vesisika/loops/Update.class
 app/vesisika/listeners/PlayerLeaveEventListener.class
+app/vesisika/Bungee.class
+app/vesisika/loops/Update.class
 app/vesisika/commands/Vesisika.class

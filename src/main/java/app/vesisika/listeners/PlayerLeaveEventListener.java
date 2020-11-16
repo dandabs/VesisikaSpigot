@@ -3,6 +3,8 @@ package app.vesisika.listeners;
 import app.vesisika.Plugin;
 import com.Zrips.CMI.CMI;
 import com.Zrips.CMI.Containers.CMIUser;
+import com.Zrips.CMI.Modules.Statistics.StatsManager;
+import io.sentry.Sentry;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -15,6 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.json.simple.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +125,16 @@ public class PlayerLeaveEventListener implements Listener {
 
                 JSONObject obj = new JSONObject();
 
-                CMIUser user = CMI.getInstance().getPlayerManager().getUser(p.getUniqueId());
+                CMIUser user;
+
+                try {
+                    user = CMI.getInstance().getPlayerManager().getUser(p.getUniqueId());
+                } catch (NullPointerException e) {
+
+                    return;
+
+                }
+
                 obj.put(p.getUniqueId(), String.valueOf(user.getBalance()));
 
                 JSONObject cmistats = new JSONObject();
@@ -131,6 +143,34 @@ public class PlayerLeaveEventListener implements Listener {
                 long time = user.getTotalPlayTimeClean(); // assuming this is in minutes
                 time_played.put(p.getUniqueId().toString(), time);
                 cmistats.put("time_played", time_played);
+
+                JSONObject deaths = new JSONObject();
+                deaths.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.DEATHS));
+                cmistats.put("deaths", deaths);
+
+                JSONObject blocks_broken = new JSONObject();
+                blocks_broken.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.MINE_BLOCK));
+                cmistats.put("blocks_broken", blocks_broken);
+
+                JSONObject damage_taken = new JSONObject();
+                damage_taken.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.DAMAGE_TAKEN));
+                cmistats.put("damage_taken", damage_taken);
+
+                JSONObject distance_traveled_walk = new JSONObject();
+                distance_traveled_walk.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.WALK_ONE_CM));
+                cmistats.put("distance_traveled_walk", distance_traveled_walk);
+
+                JSONObject distance_traveled_fly = new JSONObject();
+                distance_traveled_fly.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.FLY_ONE_CM));
+                cmistats.put("distance_traveled_fly", distance_traveled_fly);
+
+                JSONObject mobs_killed = new JSONObject();
+                mobs_killed.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.MOB_KILLS));
+                cmistats.put("mobs_killed", mobs_killed);
+
+                JSONObject players_killed = new JSONObject();
+                players_killed.put(p.getUniqueId().toString(), user.getStats().getStat(StatsManager.CMIStatistic.PLAYER_KILLS));
+                cmistats.put("players_killed", players_killed);
 
                 urlParameters += "&cmieconomy=" + obj.toString() + "&cmistats=" + cmistats.toString();
 
@@ -158,14 +198,26 @@ public class PlayerLeaveEventListener implements Listener {
                 System.out.println(responseCode);
 
             } catch (IOException e) {
-                e.printStackTrace();
             }
         });
 
         System.out.println("Sending player data to the server.");
 
+        sendMessage(finalUrlParameters + "|" + config.getString("backend.key"), p);
+
         newThread.start();
 
+    }
+
+    public void sendMessage(String message, Player p) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(stream);
+        try {
+            out.writeUTF(message);
+        } catch (IOException e) {
+        }
+
+        p.sendPluginMessage(Plugin.getInstance(), "vesisika:sync", stream.toByteArray());
     }
 
 }

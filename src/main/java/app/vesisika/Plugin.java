@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 public class Plugin extends JavaPlugin {
 
-    private static SentryClient sentry;
+    //private static SentryClient sentry;
 
     private static final Logger log = Logger.getLogger("Minecraft");
     private static Economy econ = null;
@@ -41,12 +41,14 @@ public class Plugin extends JavaPlugin {
 
         instance = this;
 
-        Sentry.init("https://c16fc30563004acd98ee1cd406c354ff@o394539.ingest.sentry.io/5283510");
+        //Sentry.init("https://c16fc30563004acd98ee1cd406c354ff@o394539.ingest.sentry.io/5283510");
         Metrics metrics = new Metrics(this, 7924);
 
         this.getCommand("vesisika").setExecutor(new Vesisika()); // register Vesisika command
 
         getServer().getPluginManager().registerEvents(new PlayerLeaveEventListener(), this);
+
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "vesisika:sync");
 
         if (!setupEconomy() ) {
 

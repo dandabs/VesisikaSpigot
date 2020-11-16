@@ -1,0 +1,4 @@
+name: VesisikaConnect
+main: app.vesisika.Bungee
+version: ${project.version}
+author: dandabs
